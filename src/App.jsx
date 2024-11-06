@@ -123,7 +123,7 @@ const App = () => {
             </div>
           );
         })}
-        <p>Designed & developed by <a href="https://nenadprokopiev.com" target="_blank">Neshko</a></p>
+        <p>Designed & developed by <a href="https://nenadprokopiev.com" target="_blank">NESHKO</a></p>
       </div>
     </>
   )
