@@ -20,7 +20,7 @@ function reducer(todos, action) {
     case ACTIONS.TOGGLE_TODO:
       return todos.map(todo => {
         if (todo.id === action.payload.id) {
-          return { ...todo, complete: !todo.complete }
+          return { ...todo, complete: !todo.complete, ...action.payload.taskCompleted.play() };
         }
         else {
           return todo;
@@ -36,6 +36,7 @@ function reducer(todos, action) {
         }
       })
     case ACTIONS.DELETE_TODO:
+      action.payload.taskDeleted.play();
       return todos.filter(todo => todo.id !== action.payload.id);
     default:
       return todos;
@@ -56,20 +57,33 @@ const App = () => {
   const day = date.getDay();
   const dayList = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const today = dayList[day];
+  const click = new Audio();
+  click.src = "src/sounds/click.mp3";
+  const newTaskAdded = new Audio();
+  newTaskAdded.src = "src/sounds/new-task-added.wav";
+  const taskUpdated = new Audio();
+  taskUpdated.src = "src/sounds/task-updated.wav";
+  const taskCompleted = new Audio();
+  taskCompleted.src = "src/sounds/task-completed.wav";
+  const taskDeleted = new Audio();
+  taskDeleted.src = "src/sounds/task-deleted.wav";
 
   function handleSubmit(e) {
     e.preventDefault();
+    newTaskAdded.play();
     dispatch({ type: ACTIONS.ADD_TODO, payload: { name: name } });
     setName('');
   }
 
   function handleEditClick(todo) {
+    click.play();
     setEditId(todo.id);
     setEditName(todo.name);
   }
 
   function handleEditSubmit(e) {
     e.preventDefault();
+    click.play();
     dispatch({ type: ACTIONS.EDIT_TODO, payload: { id: editId, name: editName } });
     setEditId(null);
     setEditName('');
@@ -95,13 +109,15 @@ const App = () => {
               {editId === todo.id ? (
                 <form onSubmit={handleEditSubmit}>
                   <input type="text" className="edit-input" value={editName} onChange={e => setEditName(e.target.value)} />
-                  <button type="submit" className="edit-submit">SAVE</button>
+                  <button type="submit" className="edit-submit" onClick={() => taskUpdated.play()}>SAVE</button>
                 </form>
               ) :
                 <Todo key={todo.id}
                   todo={todo}
                   dispatch={dispatch}
                   handleEditClick={handleEditClick}
+                  taskCompleted={taskCompleted}
+                  taskDeleted={taskDeleted}
                 />
               }
             </div>
