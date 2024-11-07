@@ -3,6 +3,11 @@ import logo from './images/logo.png';
 import Todo from './components/Todo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
+import click from './assets/click.mp3';
+import newTaskAdded from './assets/new-task-added.wav';
+import taskCompleted from './assets/task-completed.wav';
+import taskDeleted from './assets/task-deleted.wav';
+import taskUpdated from './assets/task-updated.wav';
 
 export const ACTIONS = {
   ADD_TODO: 'add-todo',
@@ -57,33 +62,23 @@ const App = () => {
   const day = date.getDay();
   const dayList = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const today = dayList[day];
-  const click = new Audio();
-  click.src = "src/sounds/click.mp3";
-  const newTaskAdded = new Audio();
-  newTaskAdded.src = "src/sounds/new-task-added.wav";
-  const taskUpdated = new Audio();
-  taskUpdated.src = "src/sounds/task-updated.wav";
-  const taskCompleted = new Audio();
-  taskCompleted.src = "src/sounds/task-completed.wav";
-  const taskDeleted = new Audio();
-  taskDeleted.src = "src/sounds/task-deleted.wav";
 
   function handleSubmit(e) {
     e.preventDefault();
-    newTaskAdded.play();
+    new Audio(newTaskAdded).play();
     dispatch({ type: ACTIONS.ADD_TODO, payload: { name: name } });
     setName('');
   }
 
   function handleEditClick(todo) {
-    click.play();
+    new Audio(click).play();
     setEditId(todo.id);
     setEditName(todo.name);
   }
 
   function handleEditSubmit(e) {
     e.preventDefault();
-    click.play();
+    new Audio(click).play();
     dispatch({ type: ACTIONS.EDIT_TODO, payload: { id: editId, name: editName } });
     setEditId(null);
     setEditName('');
@@ -109,10 +104,11 @@ const App = () => {
               {editId === todo.id ? (
                 <form onSubmit={handleEditSubmit}>
                   <input type="text" className="edit-input" value={editName} onChange={e => setEditName(e.target.value)} />
-                  <button type="submit" className="edit-submit" onClick={() => taskUpdated.play()}>SAVE</button>
+                  <button type="submit" className="edit-submit" onClick={() => new Audio(taskUpdated).play()}>SAVE</button>
                 </form>
               ) :
-                <Todo key={todo.id}
+                <Todo
+                  key={todo.id}
                   todo={todo}
                   dispatch={dispatch}
                   handleEditClick={handleEditClick}
