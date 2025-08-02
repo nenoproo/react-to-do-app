@@ -93,7 +93,7 @@ const App = () => {
         <h4 className="blinker">What are your tasks for today?</h4>
 
         <form className="todo-form" onSubmit={handleSubmit}>
-          <input type="text" className="todo-input" placeholder="✍ Add new task..." value={name} onChange={e => setName(e.target.value)} />
+          <input type="text" className="todo-input" placeholder="✏️ Add new task..." value={name} onChange={e => setName(e.target.value)} />
           <button className="todo-button"><FontAwesomeIcon icon={faSquarePlus} /></button>
         </form>
 
